@@ -171,6 +171,7 @@ enum LongitudinalPersonality {
   aggressive @0;
   standard @1;
   relaxed @2;
+  moreRelaxed @3;
 }
 
 struct InitData {
@@ -481,6 +482,7 @@ enum LaneChangeState {
   preLaneChange @1;
   laneChangeStarting @2;
   laneChangeFinishing @3;
+  laneChangeMerging @4;
 }
 
 enum LaneChangeDirection {
@@ -773,6 +775,15 @@ struct RadarState @0x9a185389d6fdd05f {
   leadOne @3 :LeadData;
   leadTwo @4 :LeadData;
 
+  leadLeft @18 :LeadData;
+  leadRight @14 :LeadData;
+  leadsCenter @15 : List(LeadData);
+  leadsLeft @16 : List(LeadData);
+  leadsRight @17 : List(LeadData);
+  leadsLeft2 @19 : List(LeadData);
+  leadsRight2 @20 : List(LeadData);
+  leadsCutIn @21 : List(LeadData);
+
   struct LeadData {
     dRel @0 :Float32;
     yRel @1 :Float32;
@@ -790,7 +801,9 @@ struct RadarState @0x9a185389d6fdd05f {
     radar @14 :Bool;
     radarTrackId @15 :Int32 = -1;
 
-    aLeadDEPRECATED @5 :Float32;
+    aLead @5 :Float32;
+    jLead @16 :Float32;
+    score @17 :Float32;
   }
 
   # deprecated
@@ -865,11 +878,12 @@ struct SelfdriveState {
   # configurable driving settings
   experimentalMode @10 :Bool;
   personality @11 :LongitudinalPersonality;
+  distanceTraveled @13 :Float32;
 
-  pandaSafetyModel @13 :Text;
-  interfaceSafetyModel @14 :Text;
-  rxChecks @15 :Bool;
-  mismatchCounter @16 :Bool;
+  pandaSafetyModel @14 :Text;
+  interfaceSafetyModel @15 :Text;
+  rxChecks @16 :Bool;
+  mismatchCounter @17 :Bool;
 
   enum OpenpilotState @0xdbe58b96d2d1ac61 {
     disabled @0;
@@ -1055,7 +1069,7 @@ struct ControlsState @0x97ff69c53601abf1 {
   steerOverrideDEPRECATED @20 :Bool;
   steeringAngleDesiredDegDEPRECATED @29 :Float32;
   canMonoTimesDEPRECATED @21 :List(UInt64);
-  desiredCurvatureRate @62 :Float32;
+  desiredCurvatureRateDEPRECATED @62 :Float32;
   canErrorCounterDEPRECATED @57 :UInt32;
   vPidDEPRECATED @2 :Float32;
   alertBlinkingRateDEPRECATED @42 :Float32;
@@ -1201,6 +1215,14 @@ struct ModelDataV2 {
     hardBrakePredicted @7 :Bool;
     laneChangeState @8 :LaneChangeState;
     laneChangeDirection @9 :LaneChangeDirection;
+    laneWidthLeft @10 :Float32;
+    laneWidthRight @11 :Float32;
+    distanceToRoadEdgeLeft @12 :Float32;
+    distanceToRoadEdgeRight @13 :Float32;
+    desire @14 :Desire;
+    laneChangeProb @15 :Float32;
+    desireLog @16 : Text;
+    modelTurnSpeed @17 :Float32;
 
 
     # deprecated
@@ -1249,6 +1271,7 @@ struct ModelDataV2 {
     desiredCurvature @0 :Float32;
     desiredAcceleration @1 :Float32;
     shouldStop @2 :Bool;
+    desiredVelocity @3 :Float32;
   }
 }
 
@@ -1320,16 +1343,25 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
   allowThrottle @38: Bool;
   allowBrake @39: Bool;
 
+  xState @40: Int32;
+  trafficState @41: Int32;
+  events @42:List(OnroadEvent);
+  vTargetNow @43: Float32;
+  cruiseTarget @44: Float32;
+  jTargetNow @45: Float32;
+  tFollow @46: Float32;
+  desiredDistance @47: Float32;
+  myDrivingMode @48: Int32;
 
   solverExecutionTime @35 :Float32;
 
-  dynamicTRMode @40 :UInt8;
-  dynamicTRValue @41 :Float32;
+  dynamicTRMode @49 :UInt8;
+  dynamicTRValue @50 :Float32;
 
-  e2eX @42 :List(Float64);
-  lead0Obstacle @43 :List(Float64);
-  lead1Obstacle @44 :List(Float64);
-  cruiseTarget @45 :List(Float64);
+  e2eX @51 :List(Float64);
+  lead0Obstacle @52 :List(Float64);
+  lead1Obstacle @53 :List(Float64);
+  cruiseTarget @54 :List(Float64);
 
   enum LongitudinalPlanSource {
     cruise @0;
@@ -1403,19 +1435,21 @@ struct LateralPlan @0xe1e9318e2ae8b51e {
   solverCost @32 :Float32;
   solverState @33 :SolverState;
 
+  position @34 :XYZTData;
+  distances @35 :List(Float32);
   struct SolverState {
     x @0 :List(List(Float32));
     u @1 :List(Float32);
   }
 
-  outputScale @34 :Float32;
-  vCruiseSet @35 :Float32;
-  vCurvature @36 :Float32;
-  lanelessMode @37 :Bool;
-  modelSpeed @38 :Float32;
-  totalCameraOffset @39 :Float32;
-  rightLanetoRightEdgeWidth @40 :Float32;
-  leftLanetoLeftEdgeWidth @41 :Float32;
+  outputScale @36 :Float32;
+  vCruiseSet @37 :Float32;
+  vCurvature @38 :Float32;
+  lanelessMode @39 :Bool;
+  modelSpeed @40 :Float32;
+  totalCameraOffset @41 :Float32;
+  rightLanetoRightEdgeWidth @42 :Float32;
+  leftLanetoLeftEdgeWidth @43 :Float32;
 
   enum Desire {
     none @0;
@@ -2697,13 +2731,10 @@ struct Event {
     controlsState @7 :ControlsState;
     selfdriveState @130 :SelfdriveState;
     gyroscope @99 :SensorEventData;
-    gyroscope2 @100 :SensorEventData;
     accelerometer @98 :SensorEventData;
-    accelerometer2 @101 :SensorEventData;
     magnetometer @95 :SensorEventData;
     lightSensor @96 :SensorEventData;
     temperatureSensor @97 :SensorEventData;
-    temperatureSensor2 @123 :SensorEventData;
     pandaStates @81 :List(PandaState);
     peripheralState @80 :PeripheralState;
     radarState @13 :RadarState;
@@ -2869,5 +2900,8 @@ struct Event {
     liveLocationKalmanDEPRECATED @72 :LiveLocationKalman;
     liveTracksDEPRECATED @16 :List(LiveTracksDEPRECATED);
     onroadEventsDEPRECATED @68: List(Car.OnroadEventDEPRECATED);
+    gyroscope2DEPRECATED @100 :SensorEventData;
+    accelerometer2DEPRECATED @101 :SensorEventData;
+    temperatureSensor2DEPRECATED @123 :SensorEventData;
   }
 }

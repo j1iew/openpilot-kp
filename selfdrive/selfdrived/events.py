@@ -271,15 +271,6 @@ def below_steer_speed_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.S
     Priority.LOW, VisualAlert.none, AudibleAlert.none, 0.4)
 
 
-def steer_saturated_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster, metric: bool, soft_disable_time: int, personality) -> Alert:
-  steer_text2 = "Steer Left" if sm['carControl'].actuators.torque > 0 else "Steer Right"
-  return Alert(
-    "Take Control",
-    steer_text2,
-    AlertStatus.userPrompt, AlertSize.mid,
-    Priority.LOW, VisualAlert.steerRequired, AudibleAlert.promptRepeat, 2.)
-
-
 def calibration_incomplete_alert(CP: car.CarParams, CS: car.CarState, sm: messaging.SubMaster, metric: bool, soft_disable_time: int, personality) -> Alert:
   first_word = 'Recalibrating' if sm['liveCalibration'].calStatus == log.LiveCalibrationData.Status.recalibrating else 'Calibrating'
   return Alert(
@@ -1321,9 +1312,6 @@ if HARDWARE.get_device_type() == 'mici':
         "",
         AlertStatus.userPrompt, AlertSize.small,
         Priority.LOW, VisualAlert.none, AudibleAlert.prompt, .1),
-    },
-    EventName.steerSaturated: {
-      ET.WARNING: steer_saturated_alert,
     },
     EventName.calibrationIncomplete: {
       ET.PERMANENT: calibration_incomplete_alert,

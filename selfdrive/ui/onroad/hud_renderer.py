@@ -40,20 +40,20 @@ class FontSizes:
 
 @dataclass(frozen=True)
 class Colors:
-  white: rl.Color = rl.WHITE
-  disengaged: rl.Color = rl.Color(145, 155, 149, 255)
-  override: rl.Color = rl.Color(145, 155, 149, 255)  # Added
-  engaged: rl.Color = rl.Color(128, 216, 166, 255)
-  disengaged_bg: rl.Color = rl.Color(0, 0, 0, 153)
-  override_bg: rl.Color = rl.Color(145, 155, 149, 204)
-  engaged_bg: rl.Color = rl.Color(128, 216, 166, 204)
-  grey: rl.Color = rl.Color(166, 166, 166, 255)
-  dark_grey: rl.Color = rl.Color(114, 114, 114, 255)
-  black_translucent: rl.Color = rl.Color(0, 0, 0, 166)
-  white_translucent: rl.Color = rl.Color(255, 255, 255, 200)
-  border_translucent: rl.Color = rl.Color(255, 255, 255, 75)
-  header_gradient_start: rl.Color = rl.Color(0, 0, 0, 114)
-  header_gradient_end: rl.Color = rl.BLANK
+  WHITE = rl.WHITE
+  DISENGAGED = rl.Color(145, 155, 149, 255)
+  OVERRIDE = rl.Color(145, 155, 149, 255)  # Added
+  ENGAGED = rl.Color(128, 216, 166, 255)
+  DISENGAGED_BG = rl.Color(0, 0, 0, 153)
+  OVERRIDE_BG = rl.Color(145, 155, 149, 204)
+  ENGAGED_BG = rl.Color(128, 216, 166, 204)
+  GREY = rl.Color(166, 166, 166, 255)
+  DARK_GREY = rl.Color(114, 114, 114, 255)
+  BLACK_TRANSLUCENT = rl.Color(0, 0, 0, 166)
+  WHITE_TRANSLUCENT = rl.Color(255, 255, 255, 200)
+  BORDER_TRANSLUCENT = rl.Color(255, 255, 255, 75)
+  HEADER_GRADIENT_START = rl.Color(0, 0, 0, 114)
+  HEADER_GRADIENT_END = rl.BLANK
   # kisa
   green_translucent: rl.Color = rl.Color(0, 200, 0, 100)
   blue_translucent: rl.Color = rl.Color(0, 140, 255, 120)
@@ -126,8 +126,8 @@ class HudRenderer(Widget):
       int(rect.y),
       int(rect.width),
       UI_CONFIG.header_height,
-      COLORS.header_gradient_start,
-      COLORS.header_gradient_end,
+      COLORS.HEADER_GRADIENT_START,
+      COLORS.HEADER_GRADIENT_END,
     )
 
     if self.is_cruise_available:
@@ -158,9 +158,9 @@ class HudRenderer(Widget):
     set_speed_rect = rl.Rectangle(x, y, set_speed_width, UI_CONFIG.set_speed_height + 2)
 
     if ui_state.exp_mode_temp:
-      pen_color = COLORS.engaged
+      pen_color = COLORS.ENGAGED
     else:
-      pen_color = COLORS.white_translucent
+      pen_color = COLORS.WHITE_TRANSLUCENT
 
     if ui_state.limitSpeedCamera > 18 and self.speed > ui_state.ctrl_speed+1.5:
       bg_brush = COLORS.ochre_translucent
@@ -169,7 +169,7 @@ class HudRenderer(Widget):
     elif ui_state.cruiseAccStatus:
       bg_brush = COLORS.blue_translucent
     else:
-      bg_brush = COLORS.black_translucent
+      bg_brush = COLORS.BLACK_TRANSLUCENT
 
     # Draw rounded rect background + border
     rl.draw_rectangle_rounded(set_speed_rect, 0.35, 32, bg_brush)
@@ -182,7 +182,7 @@ class HudRenderer(Widget):
     try:
       rl.draw_line(start, end, 6)
     except Exception:
-      rl.draw_rectangle_rounded(rl.Rectangle(start.x, start.y - 3, end.x - start.x, 6), 0.1, 3, COLORS.white)
+      rl.draw_rectangle_rounded(rl.Rectangle(start.x, start.y - 3, end.x - start.x, 6), 0.1, 3, COLORS.WHITE)
 
     if ui_state.ekisaroadlimitspeed > 21:
       setSpeedStr = str(int(ui_state.ekisaroadlimitspeed + ui_state.road_spdlimit_offset))
@@ -199,7 +199,7 @@ class HudRenderer(Widget):
     # Draw top big text
     top_font_size = 80
     top_text_w = measure_text_cached(self._font_semi_bold, top_text, top_font_size).x
-    rl.draw_text_ex(self._font_semi_bold, top_text, rl.Vector2(x + (set_speed_width - top_text_w) / 2, y), top_font_size, 0, COLORS.white)
+    rl.draw_text_ex(self._font_semi_bold, top_text, rl.Vector2(x + (set_speed_width - top_text_w) / 2, y), top_font_size, 0, COLORS.WHITE)
 
     # bottom set speed indicator
     if not ui_state.op_long_enabled:
@@ -209,11 +209,11 @@ class HudRenderer(Widget):
 
     bottom_font_size = FONT_SIZES.set_speed + 5
     bottom_text_w = measure_text_cached(self._font_bold, bottom_text, bottom_font_size).x
-    rl.draw_text_ex(self._font_bold, bottom_text, rl.Vector2(x + (set_speed_width - bottom_text_w) / 2, y + 90), bottom_font_size, 0, COLORS.white)
+    rl.draw_text_ex(self._font_bold, bottom_text, rl.Vector2(x + (set_speed_width - bottom_text_w) / 2, y + 90), bottom_font_size, 0, COLORS.WHITE)
 
     # btn spamming indicator
     if ui_state.btn_pressing > 0:
-      rl.draw_rectangle_rounded(rl.Rectangle((x + 22) - 8, (y + UI_CONFIG.set_speed_height // 2 + 7) - 8, 16, 16), 0.5, 8, COLORS.white)
+      rl.draw_rectangle_rounded(rl.Rectangle((x + 22) - 8, (y + UI_CONFIG.set_speed_height // 2 + 7) - 8, 16, 16), 0.5, 8, COLORS.WHITE)
 
   def _draw_current_speed(self, rect: rl.Rectangle) -> None:
     """Draw the current vehicle speed and unit."""
@@ -246,7 +246,7 @@ class HudRenderer(Widget):
       b = clamp(255 - int(gas_opacity), 0, 255)
       speed_color = rl.Color(r, g, b, 255)
     else:
-      speed_color = COLORS.white
+      speed_color = COLORS.WHITE
 
     set_speed_width = UI_CONFIG.set_speed_width_metric if ui_state.is_metric else UI_CONFIG.set_speed_width_imperial
     x = rect.x + 50 + (UI_CONFIG.set_speed_width_imperial - set_speed_width) // 2
@@ -257,7 +257,7 @@ class HudRenderer(Widget):
     # unit_text = "KPH" if ui_state.is_metric else "MPH"
     # unit_text_size = measure_text_cached(self._font_medium, unit_text, FONT_SIZES.speed_unit)
     # unit_pos = rl.Vector2(rect.x + rect.width / 2 - unit_text_size.x / 2, 290 - unit_text_size.y / 2)
-    # rl.draw_text_ex(self._font_medium, unit_text, unit_pos, FONT_SIZES.speed_unit, 0, COLORS.white_translucent)
+    # rl.draw_text_ex(self._font_medium, unit_text, unit_pos, FONT_SIZES.speed_unit, 0, COLORS.WHITE_TRANSLUCENT)
 
   def _draw_blinkers(self, rect: rl.Rectangle) -> None:
     """Draw KisaPilot-style blinkers."""
@@ -371,7 +371,7 @@ class HudRenderer(Widget):
 
     opacity = max(0, min(255, int(((600 - dist) * 0.425) / sl_opacity))) if dist <= 600 else 0
     rl.draw_rectangle_rounded(rects["dist"], 0.35, 32, rl.Color(255, 0, 0, opacity))
-    rl.draw_rectangle_rounded_lines_ex(rects["dist"], 0.35, 32, 6, COLORS.white_translucent)
+    rl.draw_rectangle_rounded_lines_ex(rects["dist"], 0.35, 32, 6, COLORS.WHITE_TRANSLUCENT)
 
     if ui_state.is_metric:
       dist_text = (

@@ -246,13 +246,11 @@ struct CarState {
   isMph @74 :Bool;
   aReqValue @75 :Float32;
   chargeMeter @76 :Float32;
-  brakeLights @77 :Bool;
-  pauseSpdLimit @78 :Bool;
-  leftLaneColor @79 :Int8;
-  rightLaneColor @80 :Int8;
-  engineRpm @81 :Float32;
-  cluVanz @82 :Float32;
-  isCanFD @83 :Bool;
+  pauseSpdLimit @77 :Bool;
+  leftLaneColor @78 :Int8;
+  rightLaneColor @79 :Int8;
+  cluVanz @80 :Float32;
+  isCanFD @81 :Bool;
 
   struct TPMS {
     unit @0 :Int8;
@@ -318,19 +316,21 @@ struct CarState {
       resumeCruise @10;
       gapAdjustCruise @11;
       lfa @12;
+      paddleLeft @13;
+      paddleRight @14;
     }
   }
 
   # deprecated
   errorsDEPRECATED @0 :List(OnroadEventDEPRECATED.EventName);
-  gasDEPRECATED @3 :Float32;        # this is user pedal only
-  brakeLightsDEPRECATED @19 :Bool;
+  gas @3 :Float32;        # this is user pedal only
+  brakeLights @19 :Bool;
   steeringRateLimitedDEPRECATED @29 :Bool;
   canMonoTimesDEPRECATED @12: List(UInt64);
   canRcvTimeoutDEPRECATED @49 :Bool;
   eventsDEPRECATED @13 :List(OnroadEventDEPRECATED);
   clutchPressedDEPRECATED @28 :Bool;
-  engineRpmDEPRECATED @46 :Float32;
+  engineRpm @46 :Float32;
 }
 
 # ******* radar state @ 20hz *******
@@ -362,6 +362,10 @@ struct RadarData @0x888ad6581cf0aacb {
 
     # some radars flag measurements VS estimates
     measured @6 :Bool;
+
+    vLead @7 :Float32; # m/s
+    aLead @8 :Float32; # m/s^2
+    jLead @9 :Float32; # m/s^3
   }
 
   enum ErrorDEPRECATED {
@@ -463,6 +467,9 @@ struct CarControl {
     lkasTempDisabledTimer @38: Int8;
     standStill @39: Bool;
 
+    jerk @40: Float32;  # m/s^3
+    aTarget @41: Float32;  # m/s^2
+
     enum LongControlState @0xe40f3a917d908282{
       off @0;
       pid @1;
@@ -490,6 +497,25 @@ struct CarControl {
     rightLaneDepart @8: Bool;
     leftLaneDepart @9: Bool;
     leadDistanceBars @10: Int8;  # 1-3: 1 is closest, 3 is farthest. some ports may utilize 2-4 bars instead
+
+    activeCarrot @11: Int16;
+    leadDistance @12: Float32;
+    leadRelSpeed @13: Float32;
+    leadDPath @14: Float32;
+    leadRadar @15: Int16;
+    modelDesire @16: Int16;
+    atcDistance @17: Float32;
+
+    leadLeftDist @18: Float32;
+    leadRightDist @19: Float32;
+    leadLeftLat @20: Float32;
+    leadRightLat @21: Float32;
+    leadLeftDist2 @22: Float32;
+    leadRightDist2 @23: Float32;
+    leadLeftLat2 @24: Float32;
+    leadRightLat2 @25: Float32;
+
+    e2eX @26 :List(Float64);
 
     # not used with the dash, TODO: separate structs for dash UI and device UI
     audibleAlert @5: AudibleAlert;
@@ -556,7 +582,6 @@ struct CarParams {
   notCar @66 :Bool;  # flag for non-car robotics platforms
 
   pcmCruise @3 :Bool;        # is openpilot's state tied to the PCM's cruise state?
-  enableDsu @5 :Bool;        # driving support unit
   enableBsm @56 :Bool;       # blind spot monitoring
   flags @64 :UInt32;         # flags for car specific quirks
   alphaLongitudinalAvailable @71 :Bool;
@@ -864,4 +889,5 @@ struct CarParams {
   longitudinalActuatorDelayLowerBoundDEPRECATED @61 :Float32;
   stoppingControlDEPRECATED @31 :Bool; # Does the car allow full control even at lows speeds when stopping
   radarTimeStepDEPRECATED @45: Float32 = 0.05;  # time delta between radar updates, 20Hz is very standard
+  enableDsuDEPRECATED @5 :Bool;        # driving support unit
 }
