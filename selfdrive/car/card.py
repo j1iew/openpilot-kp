@@ -168,7 +168,7 @@ class Car:
     CS = self.CI.update(can_list)
 
     # Update radar tracks from CAN
-    RD: structs.RadarDataT | None = self.RI.update(can_list)
+    # RD: structs.RadarDataT | None = self.RI.update(can_list)
 
     self.sm.update(0)
 
@@ -180,6 +180,8 @@ class Car:
 
     if can_rcv_valid and REPLAY:
       self.can_log_mono_time = messaging.log_from_bytes(can_strs[0]).logMonoTime
+
+    RD: structs.RadarDataT | None = self.RI.update_carrot(CS.vEgo, CS.aEgo, rcv_time, can_list)
 
     self.v_cruise_helper.update_v_cruise(CS, self.sm['carControl'].enabled, self.is_metric, self.sm['controlsState'], self.sm['liveENaviData'], self.sm['liveMapData'])
     if self.sm['carControl'].enabled and not self.CC_prev.enabled:
