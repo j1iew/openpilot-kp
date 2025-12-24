@@ -175,6 +175,7 @@ class SoftwareLayout(Widget):
   def _on_install_update(self):
     # Trigger reboot to install update
     self._install_btn.action_item.set_enabled(False)
+    os.system("rm -f /data/openpilot/prebuilt")
     os.system("touch /data/ks")
     ui_state.params.put_bool("DoReboot", True)
 
