@@ -420,8 +420,6 @@ def create_steering_wheel(packer, CP, CAN, cs_wheel_info):
 
 
 def create_acc_control_scc2(packer, CAN, enabled, accel_last, accel, stopping, gas_override, set_speed, hud_control, hyundai_jerk, CS):
-  enabled = (enabled or CS.softHoldActive > 0) and CS.paddle_button_prev == 0
-
   acc_mode = 0 if not enabled else (2 if gas_override else 1)
 
   if hyundai_jerk.carrot_cruise == 1:
@@ -452,7 +450,7 @@ def create_acc_control_scc2(packer, CAN, enabled, accel_last, accel, stopping, g
   #values["JerkLowerLimit"] = jerk if enabled else 1
   #values["JerkUpperLimit"] = 3.0
   values["JerkLowerLimit"] = jerk_l if enabled else 1
-  values["JerkUpperLimit"] = 2.0 if stopping or CS.softHoldActive else jerk_u
+  values["JerkUpperLimit"] = 2.0 if stopping else jerk_u
   values["DISTANCE_SETTING"] = hud_control.leadDistanceBars # + 5
   #values["DISTANCE_SETTING"] = hud_control.leadDistanceBars  + 5
 
@@ -474,7 +472,6 @@ def create_acc_control_scc2(packer, CAN, enabled, accel_last, accel, stopping, g
 
   values["TARGET_DISTANCE"] = CS.out.vEgo * 1.0 + 4.0
 
-  soft_hold_info = 1 if CS.softHoldActive > 1 and enabled else 0
 
   # 이거안하면 정지중 뒤로 밀리는 현상 발생하는듯.. (신호정지중에 뒤로 밀리는 경험함.. 시험해봐야)
   if values["InfoDisplay"] != 5: #5: Front Car Departure Notice
