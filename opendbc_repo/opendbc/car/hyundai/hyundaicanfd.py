@@ -389,7 +389,7 @@ def create_ccnc(packer, CAN, frame, enabled, lat_active, ccnc_161, ccnc_162, adr
     "LFA_ICON": 2 if enabled else ccnc_161["LFA_ICON"],
     "LANELINE_CURVATURE": 15 if enabled else ccnc_161["LANELINE_CURVATURE"],
   })
-  ret.append(packer.make_can_msg("CCNC_0x161", CAN.ECAN, values_161))
+  ret.append(packer.make_can_msg("ADRV_0x161", CAN.ECAN, values_161))
 
   values_162 = ccnc_162
   # values_162.update({
@@ -498,8 +498,8 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
 
   if CP.flags & HyundaiFlags.CAMERA_SCC.value:
     if frame % 2 == 0:
-      if CS.adrv_info_160 is not None:
-        values = copy.copy(CS.adrv_info_160)
+      if CS.adrv_160_info is not None:
+        values = copy.copy(CS.adrv_160_info)
         #values["NEW_SIGNAL_1"] = 0 # steer_temp관련없음, 계기판에러
         #values["SET_ME_9"] = 17 # steer_temp관련없음, 계기판에러
         #values["SET_ME_2"] = 0   #커멘트해도 steer_temp에러남, 2값은 콤마에서 찾은거니...
@@ -508,7 +508,7 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
         # values["SET_ME_FF"] = 0xff
         # values["SET_ME_FC"] = 0xfc
         # values["SET_ME_9"] = 0x9
-        values["NEW_SIGNAL_7"] = 0
+        values["LFA_FAULT"] = 0
         ret.append(packer.make_can_msg("ADRV_0x160", CAN.ECAN, values))
 
       if CS.cruise_buttons_msg is not None:
@@ -521,7 +521,7 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
 
 
     if frame % 5 == 0:
-      if CS.adrv_info_161 is not None:
+      if CS.adrv_161_info is not None:
         main_enabled = CS.out.cruiseState.available
         cruise_enabled = CC.enabled
         lat_enabled = CS.out.latEnabled
@@ -531,8 +531,8 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
         # hdpuse carrot
         hdp_active = True if hdp_use and cruise_enabled else False
 
-        values = copy.copy(CS.adrv_info_161)
-        #print("adrv_info_161 = ", CS.adrv_info_161)
+        values = copy.copy(CS.adrv_161_info)
+        #print("adrv_info_161 = ", CS.adrv_161_info)
 
         values["SETSPEED"] = (6 if hdp_active else 3 if cruise_enabled else 1) if main_enabled else 0
         values["SETSPEED_HUD"] = (5 if hdp_active else 3 if cruise_enabled else 1) if main_enabled else 0
@@ -601,13 +601,13 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
 
         ret.append(packer.make_can_msg("ADRV_0x161", CAN.ECAN, values))
 
-      if CS.adrv_info_200 is not None:
-        values = copy.copy(CS.adrv_info_200)
+      if CS.adrv_200_info is not None:
+        values = copy.copy(CS.adrv_200_info)
         #values["TauGapSet"] = hud_control.leadDistanceBars
         ret.append(packer.make_can_msg("ADRV_0x200", CAN.ECAN, values))
 
-      if CS.adrv_info_1ea is not None:
-        values = copy.copy(CS.adrv_info_1ea)
+      if CS.adrv_1ea_info is not None:
+        values = copy.copy(CS.adrv_1ea_info)
         # values["HDA_MODE1"] = 8
         # values["HDA_MODE2"] = 2
         if values['LF_DETECT'] == 0 and hud_control.leadLeftDist > 0:
@@ -633,8 +633,8 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
 
         ret.append(packer.make_can_msg("ADRV_0x1ea", CAN.ECAN, values))
 
-      if CS.adrv_info_162 is not None:
-        values = copy.copy(CS.adrv_info_162)
+      if CS.adrv_162_info is not None:
+        values = copy.copy(CS.adrv_162_info)
         if hud_control.leadDistance > 0:
           values["FF_DISTANCE"] = hud_control.leadDistance
           #values["FF_DETECT"] = 11 if hud_control.leadRelSpeed > -0.1 else 12  # bicycle
@@ -687,14 +687,14 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
         ret.append(packer.make_can_msg("CCNC_0x162", CAN.ECAN, values))
 
     if frame % 20 == 0:
-      if CS.adrv_info_345 is not None:
-        values = copy.copy(CS.adrv_info_345)
+      if CS.adrv_345_info is not None:
+        values = copy.copy(CS.adrv_345_info)
         # values['SET_ME_15'] = 0x15
         ret.append(packer.make_can_msg("ADRV_0x345", CAN.ECAN, values))
 
     if frame % 100 == 0:
-      if CS.adrv_info_1da is not None:
-        values = copy.copy(CS.adrv_info_1da)
+      if CS.adrv_1da_info is not None:
+        values = copy.copy(CS.adrv_1da_info)
         # values['SET_ME_22'] = 0x22
         # values['SET_ME_41'] = 0x41
         ret.append(packer.make_can_msg("ADRV_0x1da", CAN.ECAN, values))

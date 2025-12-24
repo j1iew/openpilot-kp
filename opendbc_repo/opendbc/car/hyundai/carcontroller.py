@@ -1056,7 +1056,7 @@ class CarController(CarControllerBase):
 
     # steering control
     can_sends.extend(hyundaicanfd.create_steering_messages(self.packer, self.CP, self.CAN, CC.enabled, apply_steer_req, apply_torque,
-                                                            apply_angle, lkas_max_torque, self.frame, CS.adrv_160, CS.adrv_1ea, CS.lfa_alt_info, CS.mdps_info, CS.lfa_info, CS.csw_info, CS.ccnc_161, CS.lfa_hda_info))
+                                                            apply_angle, lkas_max_torque, self.frame, CS.adrv_160_info, CS.adrv_1ea_info, CS.lfa_alt_info, CS.mdps_info, CS.lfa_info, CS.csw_info, CS.adrv_161_info, CS.lfa_hda_info))
 
     # prevent LFA from activating on LKA steering cars by sending "no lane lines detected" to ADAS ECU
     if self.frame % 5 == 0 and lka_steering:
@@ -1073,7 +1073,7 @@ class CarController(CarControllerBase):
 
     if self.CP.adrvControl:
       self.canfd_toggle_adas(CC, CS)
-      self.hyundai_jerk.make_jerk(self.CP, CS, accel, actuators)
+      self.hyundai_jerk.make_jerk(self.CP, CS, accel, actuators, hud_control)
       if self.frame % 5 == 0:
         can_sends.extend(hyundaicanfd.create_ccnc_messages(self.CP, self.packer, self.CAN, self.frame, CC, CS, hud_control, apply_angle, left_lane_warning, right_lane_warning, self.canfd_debug, self.MainMode_ACC_trigger, self.LFA_trigger, self.hdp_use))
         #can_sends.extend(hyundaicanfd.create_adrv_messages(self.CP, self.packer, self.CAN, self.frame))

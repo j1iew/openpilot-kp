@@ -67,10 +67,13 @@ class CarState(CarStateBase):
     self.cruise_btn_info = {}
     self.lfa_info = {}
     self.lfa_alt_info = {}
-    self.ccnc_161 = {}
-    self.ccnc_162 = {}
-    self.adrv_1ea = {}
-    self.adrv_160 = {}
+    self.adrv_161_info = {}
+    self.adrv_162_info = {}
+    self.adrv_1ea_info = {}
+    self.adrv_160_info = {}
+    self.adrv_200_info = {}
+    self.adrv_345_info = {}
+    self.adrv_1daS_info = {}
     self.csw_info = {}
     self.mdps_info = {}
     self.lfa_hda_info = {}
@@ -589,10 +592,13 @@ class CarState(CarStateBase):
         self.LFA_ICON = cp_cam.vl["LFAHDA_CLUSTER"]["HDA_LFA_SymSta"] == 2
         self.lfa_info = copy.copy(cp_cruise_info.vl["LFA"])
         self.lfa_alt_info = copy.copy(cp_cruise_info.vl["ADAS_CMD_35_10ms"])
-        self.ccnc_161 = copy.copy(cp_cruise_info.vl["CCNC_0x161"])
-        self.ccnc_162 = copy.copy(cp_cruise_info.vl["CCNC_0x162"])
-        self.adrv_1ea = copy.copy(cp_cruise_info.vl["ADRV_0x1ea"])
-        self.adrv_160 = copy.copy(cp_cruise_info.vl["ADRV_0x160"])
+        self.adrv_161_info = copy.copy(cp_cruise_info.vl["ADRV_0x161"])
+        self.adrv_162_info = copy.copy(cp_cruise_info.vl["ADRV_0x162"])
+        self.adrv_1ea_info = copy.copy(cp_cruise_info.vl["ADRV_0x1ea"])
+        self.adrv_160_info = copy.copy(cp_cruise_info.vl["ADRV_0x160"])
+        self.adrv_200_info = copy.copy(cp_cruise_info.vl["ADRV_0x200"])
+        self.adrv_345_info = copy.copy(cp_cruise_info.vl["ADRV_0x345"])
+        self.adrv_1da_info = copy.copy(cp_cruise_info.vl["ADRV_0x1da"])
         self.lfa_hda_info = copy.copy(cp_cruise_info.vl["LFAHDA_CLUSTER"])
         self.mdps_info = copy.copy(cp.vl["MDPS"])
 
