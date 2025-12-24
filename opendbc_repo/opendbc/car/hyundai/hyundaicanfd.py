@@ -371,8 +371,8 @@ def hkg_can_fd_checksum(address: int, sig, d: bytearray) -> int:
 
 def create_tcs_messages(packer, CAN, CS):
   ret = []
-  if CS.tcs_info_373 is not None:
-    values = copy.copy(CS.tcs_info_373)
+  if CS.tcs_373_info is not None:
+    values = copy.copy(CS.tcs_373_info)
     values["DriverBraking"] = 0
     values["DriverBrakingLowSens"] = 0
     ret.append(packer.make_can_msg("TCS", CAN.CAM, values))
@@ -697,8 +697,8 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
         ret.append(packer.make_can_msg("ADRV_0x1da", CAN.ECAN, values))
 
     if frame % 20 == 0: # 아직 시험중..
-      if CS.hda_info_4a3 is not None:
-        values = copy.copy(CS.hda_info_4a3)
+      if CS.hda_4a3_info is not None:
+        values = copy.copy(CS.hda_4a3_info)
         if canfd_debug == 5:
           #if canfd_debug == 1:
           values["SIGNAL_0"] = 5
@@ -709,7 +709,7 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
           values["NEW_SIGNAL_5"] = 0
           values["NEW_SIGNAL_6"] = 256
 
-        ret.append(packer.make_can_msg("HDA_INFO_4A3", CAN.CAM, values))
+        ret.append(packer.make_can_msg("HDA_4A3_INFO", CAN.CAM, values))
 
   return ret
 

@@ -77,6 +77,9 @@ class CarState(CarStateBase):
     self.csw_info = {}
     self.mdps_info = {}
     self.lfa_hda_info = {}
+    self.hda_4a3_info = {}
+    self.tcs_373_info = {}
+    self.cruise_buttons_msg = {}
 
     # On some cars, CLU15->CF_Clu_VehicleSpeed can oscillate faster than the dash updates. Sample at 5 Hz
     self.cluster_speed = 0
@@ -601,6 +604,7 @@ class CarState(CarStateBase):
         self.adrv_1da_info = copy.copy(cp_cruise_info.vl["ADRV_0x1da"])
         self.lfa_hda_info = copy.copy(cp_cruise_info.vl["LFAHDA_CLUSTER"])
         self.mdps_info = copy.copy(cp.vl["MDPS"])
+        self.tcs_373_info = cp.vl["TCS"]
 
       if self.lfa_button_eng:
         if self.lfa_buttons[-1]:
@@ -678,6 +682,8 @@ class CarState(CarStateBase):
     self.prev_cruise_buttons = self.cruise_buttons[-1]
 
     prev_cruise_buttons = self.cruise_buttons[-1]
+    if self.cruise_btns_msg_canfd in cp.vl:
+      self.cruise_buttons_msg = copy.copy(cp.vl[self.cruise_btns_msg_canfd])
     prev_main_buttons = self.main_buttons[-1]
     prev_lda_button = self.lda_button
     self.cruise_buttons.extend(cp.vl_all[self.cruise_btns_msg_canfd]["CRUISE_BUTTONS"])

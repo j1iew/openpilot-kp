@@ -819,7 +819,7 @@ BO_ 1151 HVAC_TOUCH_BUTTONS: 8 XXX
  SG_ RECIRC_BUTTON : 48|1@0+ (1,0) [0|1] "" XXX
  SG_ HEAT_BUTTON : 52|1@0+ (1,0) [0|1] "" XXX
 
-BO_ 1187 HDA_INFO_4A3: 8 XXX
+BO_ 1187 HDA_4A3_INFO: 8 XXX
  SG_ LinkClass : 0|3@1+ (1,0) [0|7] "" XXX
  SG_ Frwinfo : 3|3@1+ (1,0) [0|7] "" XXX
  SG_ SpeedUnit : 6|2@1+ (1,0) [0|3] "" XXX
