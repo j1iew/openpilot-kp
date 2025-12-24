@@ -888,6 +888,6 @@ struct CarParams {
   maxSteeringAngleDegDEPRECATED @54 :Float32;
   longitudinalActuatorDelayLowerBoundDEPRECATED @61 :Float32;
   stoppingControlDEPRECATED @31 :Bool; # Does the car allow full control even at lows speeds when stopping
-  radarTimeStepDEPRECATED @45: Float32 = 0.05;  # time delta between radar updates, 20Hz is very standard
+  radarTimeStep @45: Float32;  # time delta between radar updates, 20Hz is very standard
   enableDsuDEPRECATED @5 :Bool;        # driving support unit
 }
