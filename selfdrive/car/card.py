@@ -164,6 +164,8 @@ class Car:
     can_strs = messaging.drain_sock_raw(self.can_sock, wait_for_one=True)
     can_list = can_capnp_to_list(can_strs)
 
+    rcv_time = time.time()
+
     # Update carState from CAN
     CS = self.CI.update(can_list)
 
