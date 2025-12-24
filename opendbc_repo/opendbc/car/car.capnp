@@ -520,7 +520,7 @@ struct CarControl {
     leadLeftLat2 @25: Float32;
     leadRightLat2 @26: Float32;
 
-    e2eX @26 :List(Float64);
+    e2eX @27 :List(Float64);
 
     enum VisualAlert {
       # these are the choices from the Honda
