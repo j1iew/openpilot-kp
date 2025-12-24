@@ -213,6 +213,7 @@ class CarInterface(CarInterfaceBase):
       if lat_control_method == 0:
         #set_lat_tune(ret.lateralTuning, LatTunes.TORQUE)
         CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
+    ret.radarTimeStep = 0.05
 
     if (ret.openpilotLongitudinalControl and not kisaLongAlt) or params.get_bool("AlphaLongitudinalEnabled"):
       ret.safetyConfigs[-1].safetyParam |= HyundaiSafetyFlags.LONG.value
