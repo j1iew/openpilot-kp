@@ -443,7 +443,7 @@ def create_acc_control_scc2(packer, CAN, enabled, accel_last, accel, stopping, g
   values = copy.copy(CS.cruise_info)
   values["ACCMode"] = acc_mode
   values["MainMode_ACC"] = 1
-  values["StopReq"] = 1 if stopping or CS.softHoldActive > 0 else 0  # 1: Stop control is required, 2: Not used, 3: Error Indicator
+  values["StopReq"] = 1 if stopping else 0  # 1: Stop control is required, 2: Not used, 3: Error Indicator
   values["aReqValue"] = a_val
   values["aReqRaw"] = a_raw
   values["VSetDis"] = set_speed
@@ -569,7 +569,7 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
         if values["ALERTS_5"] in [1, 2, 4, 5]:
           values["ALERTS_5"] = 0
 
-        if values["ALERTS_5"] in [11] and CS.softHoldActive == 0:
+        if values["ALERTS_5"] in [11]:
           values["ALERTS_5"] = 0
 
         curvature = round(CS.out.steeringAngleDeg / 3)
