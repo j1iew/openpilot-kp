@@ -586,7 +586,7 @@ class CarState(CarStateBase):
       self.cruise_btn_info = copy.copy(cp.vl[self.cruise_btns_msg_canfd])
       if self.CP.adrvControl:
         self.MainMode_ACC = cp_cam.vl["SCC_CONTROL"]["MainMode_ACC"] == 1
-        self.LFA_ICON = cp_cam.vl["LFAHDA_CLUSTER"]["LFA_ICON"] == 2
+        self.LFA_ICON = cp_cam.vl["LFAHDA_CLUSTER"]["HDA_LFA_SymSta"] == 2
         self.lfa_info = copy.copy(cp_cruise_info.vl["LFA"])
         self.lfa_alt_info = copy.copy(cp_cruise_info.vl["ADAS_CMD_35_10ms"])
         self.ccnc_161 = copy.copy(cp_cruise_info.vl["CCNC_0x161"])
