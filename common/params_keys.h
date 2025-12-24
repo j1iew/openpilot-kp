@@ -137,6 +137,7 @@ inline static std::unordered_map<std::string, ParamKeyAttributes> keys = {
     {"KisaUIVolumeBoost", {PERSISTENT, STRING, "0"}},
     {"ShowDebugUI", {PERSISTENT, INT, "0"}},
     {"HDPuse", {PERSISTENT, BOOL, "1"}},
+    {"LongitudinalPersonalityMax", {PERSISTENT, INT, "3"}},
     {"CanfdDebug", {PERSISTENT, INT, "0"}},
     {"KisaEnableLogger", {PERSISTENT, BOOL, "0"}},
     {"KisaAutoResume", {PERSISTENT, BOOL, "1"}},

@@ -680,6 +680,7 @@ struct CarParams {
   adrvControl @101 :Bool;
   capacitiveSteeringWheel @102 :Bool;
   capacitiveSteeringWheelAlt @103 :Bool;
+  extFlags @104 :UInt32;     # carrot ext car flags
 
   struct SmoothSteerData
   {
