@@ -151,22 +151,24 @@ class HudRenderer(Widget):
 
   def _draw_set_speed(self, rect: rl.Rectangle) -> None:
     """Draw the MAX speed indicator box."""
-    set_speed_width = UI_CONFIG.set_speed_width_metric if ui_state.is_metric else UI_CONFIG.set_speed_width_imperial
+    s = ui_state
+
+    set_speed_width = UI_CONFIG.set_speed_width_metric if s.is_metric else UI_CONFIG.set_speed_width_imperial
     x = rect.x + 60 + (UI_CONFIG.set_speed_width_imperial - set_speed_width) // 2
     y = rect.y - 45 + 1020 - UI_CONFIG.set_speed_height - 185
 
     set_speed_rect = rl.Rectangle(x, y, set_speed_width, UI_CONFIG.set_speed_height + 2)
 
-    if ui_state.exp_mode_temp:
+    if s.exp_mode_temp:
       pen_color = COLORS.ENGAGED
     else:
       pen_color = COLORS.WHITE_TRANSLUCENT
 
-    if ui_state.limitSpeedCamera > 18 and self.speed > ui_state.ctrl_speed+1.5:
+    if s.limitSpeedCamera > 18 and self.speed > s.ctrl_speed+1.5:
       bg_brush = COLORS.ochre_translucent
-    elif ui_state.limitSpeedCamera > 18:
+    elif s.limitSpeedCamera > 18:
       bg_brush = COLORS.green_translucent
-    elif ui_state.cruiseAccStatus:
+    elif s.cruiseAccStatus:
       bg_brush = COLORS.blue_translucent
     else:
       bg_brush = COLORS.BLACK_TRANSLUCENT
@@ -184,16 +186,16 @@ class HudRenderer(Widget):
     except Exception:
       rl.draw_rectangle_rounded(rl.Rectangle(start.x, start.y - 3, end.x - start.x, 6), 0.1, 3, COLORS.WHITE)
 
-    if ui_state.ekisaroadlimitspeed > 21:
-      setSpeedStr = str(int(ui_state.ekisaroadlimitspeed + ui_state.road_spdlimit_offset))
-    elif ui_state.ewazeroadspeedlimit > 19:
-      setSpeedStr = str(int(ui_state.ewazeroadspeedlimit))
-    elif ui_state.ospeedLimit > 19:
-      setSpeedStr = str(int(ui_state.ospeedLimit))
+    if s.ekisaroadlimitspeed > 21:
+      setSpeedStr = str(int(s.ekisaroadlimitspeed + s.road_spdlimit_offset))
+    elif s.ewazeroadspeedlimit > 19:
+      setSpeedStr = str(int(s.ewazeroadspeedlimit))
+    elif s.ospeedLimit > 19:
+      setSpeedStr = str(int(s.ospeedLimit))
     else:
       setSpeedStr = str(round(self.set_speed)) if 0 < self.set_speed < 254 else CRUISE_DISABLED_CHAR
 
-    ctrl_speed = ui_state.ctrl_speed
+    ctrl_speed = s.ctrl_speed
     top_text = str(int(ctrl_speed)) if ctrl_speed > 1 else setSpeedStr
 
     # Draw top big text
@@ -202,17 +204,17 @@ class HudRenderer(Widget):
     rl.draw_text_ex(self._font_semi_bold, top_text, rl.Vector2(x + (set_speed_width - top_text_w) / 2, y), top_font_size, 0, COLORS.WHITE)
 
     # bottom set speed indicator
-    if not ui_state.op_long_enabled:
-      bottom_text = str(int(ui_state.vSetDis)) if ui_state.cruiseAccStatus else CRUISE_DISABLED_CHAR
+    if not s.op_long_enabled:
+      bottom_text = str(int(s.vSetDis)) if s.cruiseAccStatus else CRUISE_DISABLED_CHAR
     else:
-      bottom_text = setSpeedStr if ui_state.cruiseAccStatus else CRUISE_DISABLED_CHAR
+      bottom_text = setSpeedStr if s.cruiseAccStatus else CRUISE_DISABLED_CHAR
 
     bottom_font_size = FONT_SIZES.set_speed + 5
     bottom_text_w = measure_text_cached(self._font_bold, bottom_text, bottom_font_size).x
     rl.draw_text_ex(self._font_bold, bottom_text, rl.Vector2(x + (set_speed_width - bottom_text_w) / 2, y + 90), bottom_font_size, 0, COLORS.WHITE)
 
     # btn spamming indicator
-    if ui_state.btn_pressing > 0:
+    if s.btn_pressing > 0:
       rl.draw_rectangle_rounded(rl.Rectangle((x + 22) - 8, (y + UI_CONFIG.set_speed_height // 2 + 7) - 8, 16, 16), 0.5, 8, COLORS.WHITE)
 
   def _draw_current_speed(self, rect: rl.Rectangle) -> None:
@@ -248,7 +250,7 @@ class HudRenderer(Widget):
     else:
       speed_color = COLORS.WHITE
 
-    set_speed_width = UI_CONFIG.set_speed_width_metric if ui_state.is_metric else UI_CONFIG.set_speed_width_imperial
+    set_speed_width = UI_CONFIG.set_speed_width_metric if s.is_metric else UI_CONFIG.set_speed_width_imperial
     x = rect.x + 50 + (UI_CONFIG.set_speed_width_imperial - set_speed_width) // 2
     y = rect.y + 1020 - 230
     speed_pos = rl.Vector2(x, y)
@@ -416,6 +418,8 @@ class HudRenderer(Widget):
 
   def _draw_car_stat(self, rect: rl.Rectangle) -> None:
     """Draw KisaPilot-style CAR Status."""
+    s = ui_state
+
     img = self.img_car
     x_center = rect.x + UI_CONFIG.border_size + 56 + img.width // 2
     y_center = rect.y + 460
@@ -425,11 +429,11 @@ class HudRenderer(Widget):
     source_rect = rl.Rectangle(0, 0, img.width, img.height)
     rl.draw_texture_pro(img, source_rect, icon_rect, rl.Vector2(0, 0), 0, rl.Color(255, 255, 255, 150))
 
-    fl = ui_state.tpmsPressureFl
-    fr = ui_state.tpmsPressureFr
-    rl_p = ui_state.tpmsPressureRl
-    rr = ui_state.tpmsPressureRr
-    unit = ui_state.tpmsUnit  # 0: psi, 1: kpa, 2: bar
+    fl = s.tpmsPressureFl
+    fr = s.tpmsPressureFr
+    rl_p = s.tpmsPressureRl
+    rr = s.tpmsPressureRr
+    unit = s.tpmsUnit  # 0: psi, 1: kpa, 2: bar
 
     font_size = 36 if unit == 2 else (32 if unit != 0 else 37)
 
@@ -469,7 +473,7 @@ class HudRenderer(Widget):
     draw_value(x_center - x_offset, y_center + y_offset_rear + y_text_adjust, rl_p)  # Rear-left
     draw_value(x_center + x_offset, y_center + y_offset_rear + y_text_adjust, rr)  # Rear-right
 
-    if ui_state.brakeLights:
+    if s.brakeLights:
       brake_width = 20
       brake_height = 10
       brake_spacing = 35
@@ -490,7 +494,7 @@ class HudRenderer(Widget):
       )
       rl.draw_rectangle_rounded(brake_right, 0.9, 8, rl.Color(255, 0, 0, 180))
 
-    if ui_state.autoHold:
+    if s.autoHold:
       center_text = "AUTO\nHOLD"
       font = self._font_bold
       font_size = 27
