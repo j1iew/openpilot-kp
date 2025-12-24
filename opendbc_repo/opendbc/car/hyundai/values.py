@@ -141,6 +141,13 @@ class HyundaiFlags(IntFlag):
 
   LEGACY_ALT = 2 ** 27
 
+class HyundaiExtFlags(IntFlag):
+  NAVI_CLUSTER = 2 ** 2
+  HAS_LFAHDA = 2 ** 4
+  CANFD_GEARS_NONE = 2 ** 6
+  RADAR_GROUP1 = 2 ** 7  # 0x210 radar group 1, 0x3A5 radar group 2
+  CANFD_GEARS_69 = 2 ** 10
+
 
 @dataclass
 class HyundaiCarDocs(CarDocs):
