@@ -526,15 +526,10 @@ def create_ccnc_messages(CP, packer, CAN, frame, CC, CS, hud_control, disp_angle
         cruise_enabled = CC.enabled
         lat_enabled = CS.out.latEnabled
         lat_active = CC.latActive
-        nav_active = hud_control.activeCarrot > 1
+        nav_active = True
 
         # hdpuse carrot
-        hdp_active = False
-        if hdp_use == 1:
-            hdp_active = cruise_enabled and nav_active
-        elif hdp_use == 2:
-            hdp_active = cruise_enabled
-        # hdpuse carrot
+        hdp_active = True if hdp_use and cruise_enabled else False
 
         values = copy.copy(CS.adrv_info_161)
         #print("adrv_info_161 = ", CS.adrv_info_161)

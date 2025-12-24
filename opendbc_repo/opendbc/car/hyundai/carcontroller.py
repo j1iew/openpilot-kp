@@ -279,7 +279,7 @@ class CarController(CarControllerBase):
     self.regen_stop_timer = 0
 
     self.hyundai_jerk = HyundaiJerk()
-    self.hdp_use = int(self.c_params.get("HDPuse", return_default=True))
+    self.hdp_use = self.c_params.get_bool("HDPuse")
     self.canfd_debug = self.c_params.get("CanfdDebug", return_default=True)
     self.MainMode_ACC_trigger = 0
     self.LFA_trigger = 0
