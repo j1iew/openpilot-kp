@@ -498,30 +498,29 @@ struct CarControl {
     leftLaneDepart @9: Bool;
     leadDistanceBars @10: Int8;  # 1-3: 1 is closest, 3 is farthest. some ports may utilize 2-4 bars instead
 
-    activeCarrot @11: Int16;
-    leadDistance @12: Float32;
-    leadRelSpeed @13: Float32;
-    leadDPath @14: Float32;
-    leadRadar @15: Int16;
-    modelDesire @16: Int16;
-    atcDistance @17: Float32;
-
-    leadLeftDist @18: Float32;
-    leadRightDist @19: Float32;
-    leadLeftLat @20: Float32;
-    leadRightLat @21: Float32;
-    leadLeftDist2 @22: Float32;
-    leadRightDist2 @23: Float32;
-    leadLeftLat2 @24: Float32;
-    leadRightLat2 @25: Float32;
-
-    e2eX @26 :List(Float64);
-
     # not used with the dash, TODO: separate structs for dash UI and device UI
     audibleAlert @5: AudibleAlert;
 
     vFuture @11:Float32;
     vFutureA @12:Float32;
+
+    leadDistance @13: Float32;
+    leadRelSpeed @14: Float32;
+    leadDPath @15: Float32;
+    leadRadar @16: Int16;
+    modelDesire @17: Int16;
+    atcDistance @18: Float32;
+
+    leadLeftDist @19: Float32;
+    leadRightDist @20: Float32;
+    leadLeftLat @21: Float32;
+    leadRightLat @22: Float32;
+    leadLeftDist2 @23: Float32;
+    leadRightDist2 @24: Float32;
+    leadLeftLat2 @25: Float32;
+    leadRightLat2 @26: Float32;
+
+    e2eX @26 :List(Float64);
 
     enum VisualAlert {
       # these are the choices from the Honda
