@@ -1361,7 +1361,6 @@ struct LongitudinalPlan @0xe00b5b3eba12876c {
   e2eX @51 :List(Float64);
   lead0Obstacle @52 :List(Float64);
   lead1Obstacle @53 :List(Float64);
-  cruiseTarget @54 :List(Float64);
 
   enum LongitudinalPlanSource {
     cruise @0;
