@@ -1069,7 +1069,7 @@ struct ControlsState @0x97ff69c53601abf1 {
   steerOverrideDEPRECATED @20 :Bool;
   steeringAngleDesiredDegDEPRECATED @29 :Float32;
   canMonoTimesDEPRECATED @21 :List(UInt64);
-  desiredCurvatureRateDEPRECATED @62 :Float32;
+  desiredCurvatureRate @62 :Float32;
   canErrorCounterDEPRECATED @57 :UInt32;
   vPidDEPRECATED @2 :Float32;
   alertBlinkingRateDEPRECATED @42 :Float32;
